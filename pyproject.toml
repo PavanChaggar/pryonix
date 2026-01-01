@@ -3,16 +3,12 @@ name = "pyatn"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.13"
 dependencies = [
-    "diffrax>=0.6.1",
-    "ipykernel>=6.29.5",
-    "jax>=0.4.30",
-    "jupyter>=1.1.1",
-    "lxml>=5.3.0",
-    "matplotlib>=3.9.4",
-    "networkx>=3.2.1",
-    "numpy>=2.0.2",
-    "numpyro>=0.16.1",
-    "polars>=1.21.0",
+    "diffrax>=0.7.0",
+    "jax>=0.8.2",
+    "lxml>=6.0.2",
+    "networkx>=3.6.1",
+    "numpy>=2.4.0",
+    "polars>=1.36.1",
 ]

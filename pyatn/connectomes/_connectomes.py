@@ -6,8 +6,6 @@ import os
 from os.path import dirname
 import numpy as np
 import networkx as nx
-from scipy.sparse import coo_matrix
-from typing import Callable
 from ._graphml import load_graphml
 from ._parcellation import Parcellation
 # Paths

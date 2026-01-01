@@ -1,5 +1,4 @@
 import jax.numpy as jnp 
-import jax 
 from .._NetworkModels import NetworkModel
 
 class NetworkFKPP(NetworkModel): 
