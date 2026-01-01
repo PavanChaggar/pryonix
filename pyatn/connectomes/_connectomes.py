@@ -11,7 +11,7 @@ from typing import Callable
 from ._graphml import load_graphml
 from ._parcellation import Parcellation
 # Paths
-assetpath = os.path.join(dirname(dirname(dirname(os.path.abspath(__file__)))), 'assets')
+assetpath = os.path.join(dirname(dirname(dirname(os.path.abspath(__file__)))), 'pyatn/assets')
 
 def connectome_path():
     return os.path.join(assetpath, 'Connectomes-hcp-scale1.xml')
