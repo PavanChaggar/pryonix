@@ -129,11 +129,14 @@ class PETDataset(ABC, Generic[SubjectType]):
 
     def __len__(self):
         return len(self.SubjectData)
-
+        
     def __getitem__(self, idx):
         if isinstance(idx, int):
             return self.SubjectData[idx]
-        elif isinstance(idx, slice) or isinstance(idx, list):
+        elif isinstance(idx, slice):
+            sd = self.SubjectData[idx]
+            return self.__class__(len(sd), sd, self.rois)
+        elif isinstance(idx, list):
             sd = [self.SubjectData[i] for i in idx]
             return self.__class__(len(sd), sd, self.rois)
         else:
