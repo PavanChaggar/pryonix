@@ -18,10 +18,11 @@ class ADNIScanData(PETScanData):
 class ADNISubject(PETSubject[ADNIScanData]):
     """ADNI-specific subject class"""
     @classmethod
-    def from_dataframe(cls, subid, df, roi_names, reference_region="inferiorcerebellum"):
+    def from_dataframe(cls, subid, df, roi_names, reference_region="inferiorcerebellum", CL=False, CL_region=None):
         """
         Class method to create an ADNISubject from a Polars DataFrame.
         """
+       
         sub = df.filter(pl.col("RID") == subid)
         
         # if "EXAMDATE" in sub.columns:
@@ -49,6 +50,12 @@ class ADNISubject(PETSubject[ADNIScanData]):
         # print(subref_suvr[:,0].shape)
         subref_vol = sub.select(reference_region.upper() + "_VOLUME").to_numpy().astype(float)[:, 0]
 
+        if CL:
+            assert isinstance(CL_region, str), f"Expected str, got {type(x).__name__}"
+            subCL = sub.select(CL_region).to_numpy().astype(float)[:, 0]
+        else: 
+            subCL = np.full(len(subdate), None)
+
         n_scans = len(subdate)
         
         if n_scans == subsuvr.shape[0] == subvol.shape[0]:
@@ -58,7 +65,7 @@ class ADNISubject(PETSubject[ADNIScanData]):
                     subsuvr[i, :], 
                     subvol[i, :], 
                     subref_suvr[i], 
-                    subref_vol[i]
+                    subref_vol[i], subCL[i]
                 )
                 for i in range(n_scans)
             ]
@@ -88,18 +95,18 @@ class ADNISubject(PETSubject[ADNIScanData]):
 class ADNIDataset(PETDataset[ADNISubject]):
     """ADNI dataset class inheriting from PETDataset"""
     @classmethod
-    def from_dataframe(cls, df, roi_names, min_scans=1, max_scans=np.inf, reference_region="inferiorcerebellum", qc=True):
+    def from_dataframe(cls, df, roi_names, min_scans=1, max_scans=np.inf, reference_region="inferiorcerebellum", qc=True, CL=False, CL_region=None):
         """
         Class method to create an ADNIDataset from a Polars DataFrame.
         """
         if qc:
             df = df.filter(pl.col("qc_flag") == 2)  # check QC status
-        
+       
         n_scans = df.group_by("RID", maintain_order=True).agg(pl.len().alias("count"))
         multi_subs = n_scans.filter((pl.col("count") >= min_scans) & (pl.col("count") <= max_scans))["RID"].to_list()
         adnisubjects = []
         for sub in multi_subs:
-            subject = ADNISubject.from_dataframe(sub, df, roi_names, reference_region)
+            subject = ADNISubject.from_dataframe(sub, df, roi_names, reference_region, CL, CL_region)
             if isinstance(subject, ADNISubject):
                 adnisubjects.append(subject)
         

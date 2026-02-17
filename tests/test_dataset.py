@@ -44,7 +44,7 @@ class TestADNIScanData:
         ref_suvr = 0.5
         ref_vol = 1.0
 
-        scan = ADNIScanData(date, suvr, volume, ref_suvr, ref_vol)
+        scan = ADNIScanData(date, suvr, volume, ref_suvr, ref_vol, 0.0)
 
         assert scan.Date == date
         assert np.array_equal(scan.SUVR, suvr)
@@ -58,7 +58,7 @@ class TestADNIScanData:
         suvr = np.array([1.0])
         volume = np.array([100.0])
 
-        scan = ADNIScanData(date, suvr, volume, 0.5, 1.0)
+        scan = ADNIScanData(date, suvr, volume, 0.5, 1.0, 0.0)
         repr_str = repr(scan)
 
         assert "ADNI Scan" in repr_str
@@ -207,6 +207,16 @@ class TestADNISubject:
         assert isinstance(ic, np.ndarray)
         assert len(ic) == len(roi_names)
 
+    def test_adni_subject_get_cl(self, test_df, roi_names):
+        subject = ADNISubject.from_dataframe(
+            1, test_df, roi_names, reference_region="inferiorcerebellum", CL=True, CL_region="CENTILOIDS"
+        )
+
+        cl = subject.get_cl()
+        assert isinstance(cl, np.ndarray)
+        assert cl[0] == 100.0
+        assert len(cl) == 2
+        
     def test_adni_subject_repr(self, test_df, roi_names):
         """Test string representation of ADNISubject"""
         subject = ADNISubject.from_dataframe(

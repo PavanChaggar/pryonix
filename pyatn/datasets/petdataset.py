@@ -18,7 +18,7 @@ class PETScanData(ABC):
     Volume: np.ndarray  # 1D array of volume values
     Ref_SUVR: float
     Ref_Vol: float
-
+    CL: float | None
     @abstractmethod
     def __repr__(self):
         pass
@@ -80,6 +80,8 @@ class PETSubject(ABC, Generic[ScanDataType]):
         suvr = self.calc_suvr(max_norm=max_norm)
         return suvr[0]
 
+    def get_cl(self) -> np.ndarray:
+        return np.array([scan.CL for scan in self.Data])
 
 class PETDataset(ABC, Generic[SubjectType]):
     """Base class for PET datasets"""
@@ -124,6 +126,9 @@ class PETDataset(ABC, Generic[SubjectType]):
         """Get initial conditions (first SUVR) for all subjects"""
         return [sub.get_initial_conditions(max_norm=max_norm) for sub in self.SubjectData]
 
+    def get_cl(self) -> List[np.ndarray]:
+        return [sub.get_cl() for sub in self.SubjectData]
+    
     def __iter__(self):
         return iter(self.SubjectData)
 
