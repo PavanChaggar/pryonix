@@ -24,28 +24,41 @@ class ADNISubject(PETSubject[ADNIScanData]):
         """
         sub = df.filter(pl.col("RID") == subid)
         
-        if "EXAMDATE" in sub.columns:
-            dates = sub["EXAMDATE"].to_list()
-            subdate = [datetime.strptime(date, '%Y-%m-%d') for date in dates]
-        elif "SCANDATE" in sub.columns:
+        # if "EXAMDATE" in sub.columns:
+        #     dates = sub["EXAMDATE"].to_list()
+        #     subdate = [datetime.strptime(date, '%Y-%m-%d') for date in dates]
+        # elif "SCANDATE" in sub.columns:
+        #     dates = sub["SCANDATE"].to_list()
+        #     subdate = [datetime.strptime(date, '%Y-%m-%d') for date in dates]
+        if sub["SCANDATE"].dtype == pl.String:
             dates = sub["SCANDATE"].to_list()
             subdate = [datetime.strptime(date, '%Y-%m-%d') for date in dates]
-
-        subsuvr = np.array([sub[suvr_name(roi)] for roi in roi_names]).T
-        subvol = np.array([sub[vol_name(roi)] for roi in roi_names]).T
-        subref_suvr = np.array(sub[suvr_name(reference_region)].to_list(), dtype=float)
-        subref_vol = np.array(sub[vol_name(reference_region)].to_list(), dtype=float)
+        else: 
+            subdate = sub["SCANDATE"].to_list() # [datetime.strptime(date, '%Y-%m-%d') for date in dates]
         
+        # subsuvr = np.array([sub[suvr_name(roi)] for roi in roi_names]).T
+        # print(subsuvr.shape)
+        # subvol = np.array([sub[vol_name(roi)] for roi in roi_names]).T
+        # subref_suvr = np.array(sub[suvr_name(reference_region)].to_list(), dtype=float)
+        # subref_vol = np.array(sub[vol_name(reference_region)].to_list(), dtype=float)
+        _roi_names_suvr = [suvr_name(roi) for roi in roi_names]
+        _roi_names_vol  = [vol_name(roi) for roi in roi_names]
+        subsuvr = sub.select(_roi_names_suvr).to_numpy().astype(float)
+        subvol = sub.select(_roi_names_vol).to_numpy().astype(float)
+        subref_suvr = sub.select(reference_region.upper() + "_SUVR").to_numpy().astype(float)[:,0]
+        # print(subref_suvr[:,0].shape)
+        subref_vol = sub.select(reference_region.upper() + "_VOLUME").to_numpy().astype(float)[:, 0]
+
         n_scans = len(subdate)
         
         if n_scans == subsuvr.shape[0] == subvol.shape[0]:
             subject_data = [
                 ADNIScanData(
                     subdate[i], 
-                    subsuvr[i, :].astype(float), 
-                    subvol[i, :].astype(float), 
-                    float(subref_suvr[i]), 
-                    float(subref_vol[i])
+                    subsuvr[i, :], 
+                    subvol[i, :], 
+                    subref_suvr[i], 
+                    subref_vol[i]
                 )
                 for i in range(n_scans)
             ]
@@ -82,11 +95,8 @@ class ADNIDataset(PETDataset[ADNISubject]):
         if qc:
             df = df.filter(pl.col("qc_flag") == 2)  # check QC status
         
-        subjects = df["RID"].unique().to_list()
-        n_scans = [df.filter(pl.col("RID") == sub).height for sub in subjects]
-        
-        multi_subs = [sub for sub, scans in zip(subjects, n_scans) if min_scans <= scans <= max_scans]
-        
+        n_scans = df.group_by("RID", maintain_order=True).agg(pl.len().alias("count"))
+        multi_subs = n_scans.filter((pl.col("count") >= min_scans) & (pl.col("count") <= max_scans))["RID"].to_list()
         adnisubjects = []
         for sub in multi_subs:
             subject = ADNISubject.from_dataframe(sub, df, roi_names, reference_region)
@@ -107,3 +117,9 @@ def suvr_name(roi):
 
 def vol_name(roi):
     return f"{roi.upper()}_VOLUME"
+
+# def suvr_name(rois):
+#     return [roi.upper() + "_SUVR" for roi in rois]
+
+# def vol_name(rois):
+#     return [roi.upper() + "_VOLUME" for roi in rois]
