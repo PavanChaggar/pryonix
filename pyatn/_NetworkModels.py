@@ -68,7 +68,7 @@ class NetworkModel(ABC):
         """
         raise NotImplementedError('This should be implemented')
 
-    def simulate(self, y0, args, t0, t1, dt0, ts):
+    def simulate(self, y0, args, t0, t1, dt0, ts, max_steps=10000):
         saveat = SaveAt(ts=ts)
         return diffeqsolve(
                 self.term, 
@@ -79,5 +79,6 @@ class NetworkModel(ABC):
                 y0, 
                 args=args, 
                 saveat=saveat,
+                max_steps=max_steps,
                 stepsize_controller=self._stepsize_controller
             )
