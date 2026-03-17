@@ -23,14 +23,8 @@ class ADNISubject(PETSubject[ADNIScanData]):
         Class method to create an ADNISubject from a Polars DataFrame.
         """
        
-        sub = df.filter(pl.col("RID") == subid)
+        sub = df.filter(pl.col("RID") == subid).sort("SCANDATE")
         
-        # if "EXAMDATE" in sub.columns:
-        #     dates = sub["EXAMDATE"].to_list()
-        #     subdate = [datetime.strptime(date, '%Y-%m-%d') for date in dates]
-        # elif "SCANDATE" in sub.columns:
-        #     dates = sub["SCANDATE"].to_list()
-        #     subdate = [datetime.strptime(date, '%Y-%m-%d') for date in dates]
         if sub["SCANDATE"].dtype == pl.String:
             dates = sub["SCANDATE"].to_list()
             subdate = [datetime.strptime(date, '%Y-%m-%d') for date in dates]

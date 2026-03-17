@@ -1,6 +1,3 @@
-
-""" script containing class and functions for modelling, integrating etc
-""" 
 from abc import ABC, abstractmethod
 from .connectomes._connectomes import Connectome, laplacian_matrix
 import jax.numpy as jnp 

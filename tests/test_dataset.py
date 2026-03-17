@@ -3,7 +3,7 @@ import polars as pl
 import numpy as np
 from datetime import datetime
 from pathlib import Path
-from pyatn.datasets.adnidataset import ADNIDataset, ADNISubject, ADNIScanData
+from pryonix.datasets.adnidataset import ADNIDataset, ADNISubject, ADNIScanData
 
 
 @pytest.fixture
