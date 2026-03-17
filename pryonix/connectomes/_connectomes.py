@@ -9,7 +9,7 @@ import networkx as nx
 from ._graphml import load_graphml
 from ._parcellation import Parcellation
 # Paths
-assetpath = os.path.join(dirname(dirname(dirname(os.path.abspath(__file__)))), 'pyatn/assets')
+assetpath = os.path.join(dirname(dirname(dirname(os.path.abspath(__file__)))), 'pryonix/assets')
 
 def connectome_path():
     return os.path.join(assetpath, 'Connectomes-hcp-scale1.xml')
