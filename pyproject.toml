@@ -1,7 +1,7 @@
 [project]
 name = "pryonix"
 version = "0.1.0"
-description = "Add your description here"
+description = "A Python package for connectome-based dynamical models and PET dataset utilities for studying neurodegenerative disease progression."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
