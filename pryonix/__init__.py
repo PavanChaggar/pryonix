@@ -1,6 +1,4 @@
-from pryonix import connectomes, models, datasets
-
-from .NetworkModels import (
+from .networkmodel import (
     NetworkModel
 )
 
