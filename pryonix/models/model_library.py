@@ -1,5 +1,5 @@
 import jax.numpy as jnp 
-from .._NetworkModels import NetworkModel
+from ..NetworkModels import NetworkModel
 
 class NetworkDiffusion(NetworkModel): 
     def f(self, t, u, args):
