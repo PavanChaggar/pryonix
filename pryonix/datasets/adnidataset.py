@@ -45,7 +45,7 @@ class ADNISubject(PETSubject[ADNIScanData]):
         subref_vol = sub.select(reference_region.upper() + "_VOLUME").to_numpy().astype(float)[:, 0]
 
         if CL:
-            assert isinstance(CL_region, str), f"Expected str, got {type(x).__name__}"
+            assert isinstance(CL_region, str), f"Expected str, got {type(CL_region).__name__}"
             subCL = sub.select(CL_region).to_numpy().astype(float)[:, 0]
         else: 
             subCL = np.full(len(subdate), None)
