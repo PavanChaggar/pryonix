@@ -9,7 +9,7 @@ dependencies = [
     "jax>=0.8.2",
     "lxml>=6.0.2",
     "networkx>=3.6.1",
-    "numpy>=2.4.0",
+    "numpy>=2.0,!=2.4.0",
     "polars>=1.36.1",
 ]
 
