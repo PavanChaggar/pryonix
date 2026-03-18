@@ -1,4 +1,0 @@
-from .networkmodel import (
-    NetworkModel
-)
-

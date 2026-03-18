@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from .connectomes._connectomes import Connectome, laplacian_matrix
+from ..connectomes._connectomes import Connectome, laplacian_matrix
 import jax.numpy as jnp 
 from diffrax import ODETerm, Tsit5, SaveAt, diffeqsolve, PIDController
 
@@ -8,26 +8,19 @@ class NetworkModel(ABC):
 
        Parameters:
        -----------
-       network_path (str)
-            path to a network array, .csv, or .graphml
+       c : Connectome
+           A Connectome object containing the network structure on which the model will be implemented.
 
     """
     def __init__(self, c: Connectome):
         """initialise class with network and model 
         args:
-        c           : Connectome
-                     string to the location of a csv containing an adjacency matrix
-        model_name  : str 
-                     string containing the model user wishes to initialised 
-                     options: 
-                        - 'network_diffusion' 
-                           du = k*(L @ p)
+        c : Connectome
+            A Connectome object containing the network structure on which the model will be implemented.
         """
         self._c = c
         self._nv = len(c.parc)
-        # self._A = adjacency_matrix(network_path)
-        # self._D = degree_matrix(self.__A)
-        self._L = jnp.array(laplacian_matrix(c))
+        self.L = jnp.array(laplacian_matrix(c))
         self.term = ODETerm(self.f)
         self._stepsize_controller = PIDController(rtol=1e-3, atol=1e-3)
 
@@ -53,15 +46,19 @@ class NetworkModel(ABC):
 
         Parameters:
         -----------
+        t (float)
+            time variable
         u0 (array)
-            array containing intial conditions
-        t (array)
-            numpy array containing time steps at which to evaluate model
-            e.g. t = jnp.linespace(0, 1, 100)
+            array containing state variable
         params (array)
             array containing parameter values
-            e.g. params = jnp.array([k])
-                k = diffusion coefficient
+
+        Example:
+        --------
+        def f(self, t, u, args):
+            transport_rate = args[0]
+            du = -transport_rate * jnp.dot(self._L, u)
+            return du
         """
         raise NotImplementedError('This should be implemented')
 
