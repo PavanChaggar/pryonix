@@ -96,12 +96,11 @@ y0 = jnp.ones(n)
 ts = jnp.linspace(0.0, 10.0, 101)
 
 solution = model.simulate(
-    y0=y0,
-    args=0.1,
-    t0=0.0,
-    t1=10.0,
-    dt0=0.1,
-    ts=ts,
+    y0,     # initial conditions
+    0.1,    # parameters 
+    0.0,    # t0
+    10.0,   # t final
+    ts,     # save at times
 )
 
 print(solution.ys.shape)
