@@ -111,3 +111,8 @@ print(solution.ys.shape)
 Pryonix is currently an early-stage research package.
 
 The dataset functionality is centered on ADNI-style PET tables, and the modelling interface is designed around JAX/Diffrax-based network ODEs. The public API may still evolve as the package grows.
+
+## TODO 
+
+[] Add more docs and docstrings
+[] Add plotting functionality for time series and cortical rendering
