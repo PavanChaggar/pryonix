@@ -114,5 +114,5 @@ The dataset functionality is centered on ADNI-style PET tables, and the modellin
 
 ## TODO 
 
-[] Add more docs and docstrings
-[] Add plotting functionality for time series and cortical rendering
+- [ ] Add more docs and docstrings
+- [ ] Add plotting functionality for time series and cortical rendering
