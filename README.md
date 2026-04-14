@@ -102,8 +102,21 @@ solution = model.simulate(
     10.0,   # t final
     ts,     # save at times
 )
+```
 
-print(solution.ys.shape)
+Diffrax options can be added as keywork arguments to the `simulate` function. For example: 
+```python
+from diffrax import Tsit5, PIDController
+
+solution = model.simulate(
+    y0,                                                      # initial conditions
+    0.1,                                                     # parameters 
+    0.0,                                                     # t0
+    10.0,                                                    # t final
+    ts,                                                      # save at times
+    solver=Tsit5()                                           # set solver 
+    stepsize_controller=PIDController(rtol=1e-3, atol=1e-3)  # set stepsize controller
+)
 ```
 
 ## Current status
@@ -116,3 +129,4 @@ The dataset functionality is centered on ADNI-style PET tables, and the modellin
 
 - [ ] Add more docs and docstrings
 - [ ] Add plotting functionality for time series and cortical rendering
+- [ ] Refactor simulation api (make some diffrax kwards class attributes?)
