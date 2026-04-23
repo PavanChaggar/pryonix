@@ -55,7 +55,7 @@ class Connectome:
         L = self.l_matrix[np.ix_(idx, idx)]
         weighted_graph = self.weight_function(N, L)
         A = np.nan_to_num(weighted_graph)
-        print(self.n_matrix)
+
         if norm:
             A /= np.max(A)
 
