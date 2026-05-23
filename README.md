@@ -65,14 +65,12 @@ The connectome utilities support:
 
 The main dataset class currently exposed is `ADNIDataset`, which builds a cohort from a tabular ADNI-style PET dataset. This supports loading SUVR and time values for inputting as initial conditions an ODE model. For example, with the Berekely PET tabular data from ADNI, one can do: 
 
-```
-
+```python
 dataset = ADNIDataset.from_dataframe(
     adni_df,
     roi_names=roi_names,
     reference_region="inferiorcerebellum",
 )
-
 ```
 where `adni_df` is the tabular data from ADNI, `roi_names` are the regions of interst for which one wants SUVR data, `reference_region` is the region used to calculate SUVR values. Then one can access the SUVR values and times for a given dataset with: 
 
