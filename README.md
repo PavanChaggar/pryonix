@@ -49,7 +49,7 @@ The current model library includes:
 - `NetworkATN`
 - `ScaledNetworkATN`
 
-These inherit from a common `NetworkModel` base class and are solved through Diffrax.
+These inherit from a common `NetworkModel` base class and are solved using Diffrax.
 
 ### Connectomes
 
@@ -124,7 +124,8 @@ Pryonix is currently an early-stage research package.
 The dataset functionality is centered on ADNI-style PET tables, and the modelling interface is designed around JAX/Diffrax-based network ODEs. The public API may still evolve as the package grows.
 
 ## TODO 
-
 - [ ] Add more docs and docstrings
 - [ ] Add plotting functionality for time series and cortical rendering
-- [ ] Refactor simulation api (make some diffrax kwards class attributes?)
+    - integratation with yabplot? 
+- [ ] Add test for different connectomes. Load from ENIGMA repo? 
+- [x] Refactor simulation api (make some diffrax kwards class attributes?)
