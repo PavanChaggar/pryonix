@@ -128,4 +128,4 @@ The dataset functionality is centered on ADNI-style PET tables, and the modellin
 - [ ] Add plotting functionality for time series and cortical rendering
     - integratation with yabplot? 
 - [ ] Add test for different connectomes. Load from ENIGMA repo? 
-- [x] Refactor simulation api (make some diffrax kwards class attributes?)
+- [x] Add simpler API using common functions for transport/production
